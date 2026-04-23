@@ -258,9 +258,11 @@ class NotchViewModel: ObservableObject {
     private func repostClickAt(_ location: CGPoint) {
         // Small delay to let the window's ignoresMouseEvents update
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            // Convert to CGEvent coordinate system (screen coordinates with Y from top-left)
-            guard let screen = NSScreen.main else { return }
-            let screenHeight = screen.frame.height
+            // Convert to CGEvent coordinates (Y from top of the PRIMARY screen).
+            // NSEvent.mouseLocation is in AppKit global coords — Y origin is the
+            // bottom of NSScreen.screens.first, not NSScreen.main.
+            guard let primary = NSScreen.screens.first else { return }
+            let screenHeight = primary.frame.height
             let cgPoint = CGPoint(x: location.x, y: screenHeight - location.y)
 
             // Create and post mouse down event
