@@ -7,7 +7,11 @@ import os.log
 
 private let logger = Logger(subsystem: "com.vibehub", category: "NowPlaying")
 
-/// Polls Spotify via AppleScript for now-playing info.
+/// Event-driven Spotify now-playing tracker.
+///
+/// Listens to Spotify's `PlaybackStateChanged` broadcast and `NSWorkspace`
+/// launch/terminate events instead of polling. AppleScript is only invoked
+/// in response to a real event, and never when Spotify isn't running.
 actor NowPlayingService {
     static let shared = NowPlayingService()
 
@@ -19,8 +23,11 @@ actor NowPlayingService {
     private var artworkCache: [String: NSImage] = [:]
     private var lastArtworkURL: String?
 
-    private var pollTask: Task<Void, Never>?
-    private let pollInterval: TimeInterval = 2.0
+    private var spotifyNotificationTask: Task<Void, Never>?
+    private var workspaceLaunchTask: Task<Void, Never>?
+    private var workspaceTerminateTask: Task<Void, Never>?
+
+    private static let spotifyBundleID = "com.spotify.client"
 
     private init() {}
 
@@ -28,18 +35,77 @@ actor NowPlayingService {
 
     func start() {
         logger.info("NowPlayingService started (Spotify)")
-        pollTask?.cancel()
-        pollTask = Task { [weak self] in
-            while !Task.isCancelled {
-                await self?.poll()
-                try? await Task.sleep(for: .seconds(self?.pollInterval ?? 2.0))
+        cancelTasks()
+
+        // Spotify broadcasts this on every track/play-state change.
+        let spotifyEvents = DistributedNotificationCenter.default()
+            .notifications(named: Notification.Name("com.spotify.client.PlaybackStateChanged"))
+        spotifyNotificationTask = Task { [weak self] in
+            for await _ in spotifyEvents {
+                guard let self else { return }
+                await self.refresh()
             }
         }
+
+        // Refresh when Spotify launches; clear when it quits — cheaper than
+        // probing `runningApplications` on every event.
+        let launches = NSWorkspace.shared.notificationCenter
+            .notifications(named: NSWorkspace.didLaunchApplicationNotification)
+        workspaceLaunchTask = Task { [weak self] in
+            for await note in launches {
+                guard
+                    let self,
+                    let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+                    app.bundleIdentifier == Self.spotifyBundleID
+                else { continue }
+                await self.refresh()
+            }
+        }
+
+        let terminations = NSWorkspace.shared.notificationCenter
+            .notifications(named: NSWorkspace.didTerminateApplicationNotification)
+        workspaceTerminateTask = Task { [weak self] in
+            for await note in terminations {
+                guard
+                    let self,
+                    let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+                    app.bundleIdentifier == Self.spotifyBundleID
+                else { continue }
+                await self.clear()
+            }
+        }
+
+        // Initial state — only spawns osascript if Spotify is already running.
+        Task { [weak self] in await self?.refresh() }
     }
 
     func stop() {
-        pollTask?.cancel()
-        pollTask = nil
+        cancelTasks()
+    }
+
+    private func cancelTasks() {
+        spotifyNotificationTask?.cancel(); spotifyNotificationTask = nil
+        workspaceLaunchTask?.cancel(); workspaceLaunchTask = nil
+        workspaceTerminateTask?.cancel(); workspaceTerminateTask = nil
+    }
+
+    private nonisolated func isSpotifyRunning() -> Bool {
+        NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == Self.spotifyBundleID }
+    }
+
+    private func refresh() async {
+        guard isSpotifyRunning() else {
+            clear()
+            return
+        }
+        await poll()
+    }
+
+    private func clear() {
+        if stateSubject.value.hasMedia {
+            stateSubject.send(.empty)
+        }
+        lastArtworkURL = nil
     }
 
     // MARK: - Polling
@@ -131,6 +197,7 @@ actor NowPlayingService {
     // MARK: - Controls
 
     func togglePlayPause() async {
+        guard isSpotifyRunning() else { return }
         _ = await executor.runWithResult(
             "/usr/bin/osascript",
             arguments: ["-e", "tell application \"Spotify\" to playpause"],
@@ -139,21 +206,23 @@ actor NowPlayingService {
     }
 
     func next() async {
+        guard isSpotifyRunning() else { return }
         _ = await executor.runWithResult(
             "/usr/bin/osascript",
             arguments: ["-e", "tell application \"Spotify\" to next track"],
             timeoutSeconds: 2
         )
-        await poll()
+        await refresh()
     }
 
     func previous() async {
+        guard isSpotifyRunning() else { return }
         _ = await executor.runWithResult(
             "/usr/bin/osascript",
             arguments: ["-e", "tell application \"Spotify\" to previous track"],
             timeoutSeconds: 2
         )
-        await poll()
+        await refresh()
     }
 }
 
