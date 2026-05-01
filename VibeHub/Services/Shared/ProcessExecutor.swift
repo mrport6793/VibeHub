@@ -60,7 +60,7 @@ struct ProcessResult: Sendable {
 }
 
 /// Protocol for executing shell commands (enables testing)
-protocol ProcessExecuting: Sendable {
+nonisolated protocol ProcessExecuting: Sendable {
     func run(_ executable: String, arguments: [String], environment: [String: String]?) async throws -> String
     func runWithResult(_ executable: String, arguments: [String], environment: [String: String]?) async -> Result<ProcessResult, ProcessExecutorError>
     func runWithResult(_ executable: String, arguments: [String], timeoutSeconds: Int, environment: [String: String]?) async -> Result<ProcessResult, ProcessExecutorError>
@@ -69,8 +69,8 @@ protocol ProcessExecuting: Sendable {
 
 /// Default implementation using Foundation.Process
 actor ProcessExecutor: ProcessExecuting {
-    /// Shared instance (nonisolated(unsafe) required for actor init in static context)
-    nonisolated(unsafe) static let shared = ProcessExecutor()
+    /// Shared instance
+    nonisolated static let shared = ProcessExecutor()
 
     /// Logger for process execution (nonisolated static for cross-context access)
     nonisolated static let logger = Logger(subsystem: "com.vibehub", category: "ProcessExecutor")

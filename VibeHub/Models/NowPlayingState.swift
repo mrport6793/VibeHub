@@ -13,7 +13,7 @@ struct NowPlayingState {
 
     var hasMedia: Bool { title != nil }
 
-    static let empty = NowPlayingState(
+    nonisolated static let empty = NowPlayingState(
         title: nil, artist: nil, album: nil,
         artwork: nil, isPlaying: false,
         duration: 0, elapsed: 0
