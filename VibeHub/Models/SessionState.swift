@@ -141,10 +141,16 @@ struct SessionState: Equatable, Identifiable, Sendable {
 
         let project = projectName
 
-        if let summary = cleaned(conversationInfo.summary) {
-            // Keep old behavior if summary already contains the project name.
-            if summary == project { return summary }
+        // Use summary only when it adds information beyond the project name.
+        if let summary = cleaned(conversationInfo.summary), summary != project {
             return "\(project) - \(summary)"
+        }
+
+        // Most-recent user message from chatItems — captures the current ask
+        // for active sessions and the last ask for idle ones.
+        if let recent = cleaned(lastUserChatItem) {
+            if recent == project { return recent }
+            return "\(project) - \(recent)"
         }
 
         if let first = cleaned(conversationInfo.firstUserMessage) {
@@ -159,6 +165,13 @@ struct SessionState: Equatable, Identifiable, Sendable {
         }
 
         return project
+    }
+
+    private var lastUserChatItem: String? {
+        for item in chatItems.reversed() {
+            if case .user(let msg) = item.type { return msg }
+        }
+        return nil
     }
 
     /// Short title used in compact UI (closed notch).

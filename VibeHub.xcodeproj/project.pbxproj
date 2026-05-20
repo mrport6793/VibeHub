@@ -321,26 +321,28 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = 894KCRH96Q;
+				DEVELOPMENT_TEAM = T24C57RZ2L;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Vibe Hub";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_MixpanelToken = 49814c1436104ed108f3fc4735228496;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Vibe Hub needs permission to switch terminal tabs when focusing a session.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2025. All rights reserved.";
 				INFOPLIST_KEY_SUEnableAutomaticChecks = YES;
 				INFOPLIST_KEY_SUFeedURL = "https://mtunique.github.io/VibeHub/appcast.xml";
 				INFOPLIST_KEY_SUPublicEDKey = "U8Y0ms3c3A8x0jnZvJ7wPYTC+kr0bmuGj6umXG2JfiQ=";
-				INFOPLIST_KEY_MixpanelToken = "49814c1436104ed108f3fc4735228496";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mtunique.vibehub;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mrport6793.vibehub;
 				PRODUCT_NAME = VibeHub;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -363,26 +365,28 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = 894KCRH96Q;
+				DEVELOPMENT_TEAM = T24C57RZ2L;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Vibe Hub";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_MixpanelToken = 49814c1436104ed108f3fc4735228496;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Vibe Hub needs permission to switch terminal tabs when focusing a session.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2025. All rights reserved.";
 				INFOPLIST_KEY_SUEnableAutomaticChecks = YES;
 				INFOPLIST_KEY_SUFeedURL = "https://mtunique.github.io/VibeHub/appcast.xml";
 				INFOPLIST_KEY_SUPublicEDKey = "U8Y0ms3c3A8x0jnZvJ7wPYTC+kr0bmuGj6umXG2JfiQ=";
-				INFOPLIST_KEY_MixpanelToken = "49814c1436104ed108f3fc4735228496";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mtunique.vibehub;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mrport6793.vibehub;
 				PRODUCT_NAME = VibeHub;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -400,20 +404,22 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VibeHub/Resources/VibeHub.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = 894KCRH96Q;
+				DEVELOPMENT_TEAM = T24C57RZ2L;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Vibe Hub";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Vibe Hub needs permission to switch terminal tabs when focusing a session.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2025. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

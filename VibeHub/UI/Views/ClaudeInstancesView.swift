@@ -68,7 +68,7 @@ struct ClaudeInstancesView: View {
     private var instancesList: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 2) {
-                ForEach(sortedInstances) { session in
+                ForEach(sortedInstances.prefix(3)) { session in
                     InstanceRow(
                         session: session,
                         onFocus: { focusSession(session) },
@@ -161,7 +161,7 @@ struct InstanceRow: View {
                 Text(session.displayTitle)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.white)
-                    .lineLimit(1)
+                    .lineLimit(2)
 
                 Spacer(minLength: 0)
 

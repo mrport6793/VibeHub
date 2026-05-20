@@ -129,9 +129,13 @@ actor SessionStore {
         }
         #endif
 
+        let previousPid = session.pid
         session.pid = event.pid
 
-        if let pid = session.pid {
+        // tmux ancestry is fixed for a session's lifetime, so building the full
+        // system process tree on every hook event is wasteful. Only (re)compute
+        // when the session is new or its pid actually changes.
+        if let pid = session.pid, isNewSession || pid != previousPid {
             let tree = ProcessTreeBuilder.shared.buildTree()
             session.isInTmux = ProcessTreeBuilder.shared.isInTmux(pid: pid, tree: tree)
         }
